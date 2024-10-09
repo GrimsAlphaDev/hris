@@ -10,7 +10,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true); // Tambahkan state loading
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token'); 
         if (token) {
             try {
                 const decodedUser: any = jwtDecode(token); // Ambil tipe yang sesuai jika Anda sudah mendeklarasikan tipe
@@ -34,7 +34,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-center h-screen">
                 <div className="loader">Loading...</div> {/* Anda bisa mengganti ini dengan spinner */}
             </div>
-        );
+        ); 
     }
 
     console.log(user);
