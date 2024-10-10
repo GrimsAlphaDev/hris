@@ -7,7 +7,7 @@ import { BackgroundBeamsWithCollision } from '../ui/background-beams-with-collis
 
 const HeroSection = () => {
   return (
-    <BackgroundBeamsWithCollision className='w-full flex justify-center items-center p-20 sm:p-10'>
+    <BackgroundBeamsWithCollision className='w-full flex justify-center items-center pt-20 md:p-20 sm:p-10'>
       <div className='justify-center items-center flex-1 text-center md:text-left lg:text-left'>
         <motion.h1
           initial={{
