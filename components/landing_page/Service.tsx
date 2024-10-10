@@ -7,7 +7,7 @@ import { service } from '@/data/service';
 
 const Service = () => {
     return (
-        <section className='w-full flex flex-col justify-center items-center p-20 md:p-20 sm:p-10' id='service'>
+        <section className='w-full flex flex-col justify-center items-center p-10 md:p-20 sm:p-10' id='service'>
             <TextRevealCard
                 text="Our Full Service HR Solution Delivers"
                 revealText="Our Full Service HR Solution Delivers"
