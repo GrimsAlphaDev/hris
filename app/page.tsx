@@ -8,7 +8,7 @@ import { navMenu } from "@/data/navMenu";
 export default function Home() {
   return (
     <main className="dark:bg-black bg-white w-full h-full">
-      <FloatingNav className="fixed top-10 inset-x-0 mx-auto" navItems={navMenu} />
+      <FloatingNav navItems={navMenu} />
       <HeroSection />
       <Service />
       <Support />

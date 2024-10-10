@@ -2,14 +2,18 @@
 export const navMenu = [
     {
         name: "Home",
-        link: "/",
+        link: "#home",
     },
     {
-        name: "About",
-        link: "/about",
+        name: "Service",
+        link: "#service",
     },
     {
-        name: "Contact",
-        link: "/contact",
+        name: "Support",
+        link: "#support",
+    },
+    {
+        name: "Contact Us",
+        link: "#contact",
     },
 ];

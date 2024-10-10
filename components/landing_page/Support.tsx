@@ -3,7 +3,7 @@ import React from 'react'
 
 const Support = () => {
     return (
-        <section className='w-full flex flex-col dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative' id='service'>
+        <section className='w-full flex flex-col dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative' id='support'>
             <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
             <div className='flex flex-col md:flex-row justify-center items-center p-10 md:px-20 sm:p-10 gap-6'>
                 <div className='basis-1/2'>
