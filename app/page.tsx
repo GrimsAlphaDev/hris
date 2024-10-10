@@ -1,3 +1,4 @@
+import Footer from "@/components/landing_page/Footer";
 import HeroSection from "@/components/landing_page/HeroSection";
 import Service from "@/components/landing_page/Service";
 import Support from "@/components/landing_page/Support";
@@ -11,6 +12,7 @@ export default function Home() {
       <HeroSection />
       <Service />
       <Support />
+      <Footer />
     </main>
   );
 }
