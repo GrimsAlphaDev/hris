@@ -107,6 +107,7 @@ export default function Home() {
             setLoading(false); // Nonaktifkan loader setelah selesai
         }
     };
+    
 
     return (
 

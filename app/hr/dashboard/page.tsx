@@ -2,31 +2,54 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { UserType } from '@/types/user';
-import { decryptToken } from '@/lib/jwt';
+import axios from 'axios';
+import { UserModel } from '@/models/UserModel';
 
 const Dashboard = () => {
-    const [user, setUser] = useState<UserType | undefined>(undefined); // Ganti dengan tipe yang sesuai jika diperlukan
+    const [user, setUser] = useState<UserModel | null>(null); // Ganti dengan tipe yang sesuai jika diperlukan
     const [loading, setLoading] = useState(true); // Tambahkan state loading
-
+    const [csrfToken, setCsrfToken] = useState<string | null>(null);
     useEffect(() => {
-        async function fetchData() {
-            const encryptedUserData = localStorage.getItem('x-encrypted-user');
-            console.log(encryptedUserData);
-            if (encryptedUserData) {
-                const decryptedUserData = await decryptToken(encryptedUserData);
-                setUser(JSON.parse(decryptedUserData));
+        const fetchCsrfToken = async () => {
+            try {
+                const response = await axios.get("/api/csrf");
+                setCsrfToken(response.data.csrfToken);
+            } catch (error) {
+                console.error("Failed to fetch CSRF token:", error);
             }
-            setLoading(false);
+        };
+
+        const fetchUserDetails = async () => {
+            try {
+                const response = await axios.post("/api/auth/user");
+                const userData = {
+                    name: response.data.user.name,
+                    email: response.data.user.email,
+                };
+
+                // Set user in state
+                setUser(userData);
+
+                // Set user in local storage here
+                // localStorage.setItem('user', JSON.stringify(userData));
+                // console.log(localStorage.getItem('user')); // Verify saved data
+
+            } catch (error) {
+                console.error("Failed to fetch user details:", error);
+            } finally {
+                setLoading(false);
+            }
         }
-        fetchData();
+
+        fetchCsrfToken();
+        fetchUserDetails();
     }, []);
 
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="loader">Loading...</div> {/* Anda bisa mengganti ini dengan spinner */}
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+                <div className="loader"></div>
             </div>
         );
     }
