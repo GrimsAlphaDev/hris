@@ -85,7 +85,11 @@ export default function Home() {
                 },
             });
 
-            console.log(response.data);
+            // check if response status is 200
+            if (response.status === 200) {
+                // Redirect to dashboard
+                window.location.href = "/hr/dashboard";
+            }
 
         } catch (error: any) {
             console.error("Failed to login:", error);

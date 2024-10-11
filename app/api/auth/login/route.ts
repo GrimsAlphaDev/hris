@@ -1,13 +1,14 @@
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 import { csrf } from "../../csrf/route";
+import { createToken, encryptToken } from "@/lib/jwt";
+import { cookies } from "next/headers";
 
 const tokens = new csrf();
 const secret = process.env.CSRF_SECRET || tokens.secretSync();
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     const { csrfToken, email, password } = await req.json();
 
     try {
@@ -29,10 +30,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // Find the user by email
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) {
-            return new Response(JSON.stringify({ error: "Invalid Credential" }), {
-                status: 404,
-                headers: { "Content-Type": "application/json" },
-            });
+            return new Response(
+                JSON.stringify({ error: "Invalid Credential" }),
+                {
+                    status: 404,
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
         }
 
         // Verify the password
@@ -61,17 +65,30 @@ export async function POST(req: NextRequest, res: NextResponse) {
             );
         }
 
-        // Create a JWT token
-        const token = jwt.sign(
-            { userId: user.id, role: user.role, email: user.email },
-            "verysecretkey",
-            { expiresIn: "1d" }
-        );
+        const token = createToken({
+            userId: user.id,
+            role: user.role,
+            email: user.email,
+            name: user.name,
+        });
+
+        // encrypt the token
+        const encryptedToken = await encryptToken(token);
+
+        cookies().set("token", encryptedToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: "strict",
+            maxAge: 3600,
+        });
+
 
         // Return the token in the response
         return new Response(JSON.stringify({ token }), {
             status: 200,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
     } catch (error) {
         console.error("Error:", error);
