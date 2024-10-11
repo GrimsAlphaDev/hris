@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 
 // Skema validasi menggunakan Yup
@@ -22,11 +23,8 @@ const validationSchema = Yup.object().shape({
 
 export default function Home() {
 
-    const [showAlert, setShowAlert] = useState(true); // State untuk menampilkan alert
     const [showPassword, setShowPassword] = useState(false); // State untuk menampilkan password
     const [csrfToken, setCsrfToken] = useState<string | null>(null);
-    const [showErrorAlert, setShowErrorAlert] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false); // State untuk loader
 
     useEffect(() => {
@@ -47,12 +45,29 @@ export default function Home() {
 
 
     useEffect(() => {
-        // Menyembunyikan alert setelah 3 detik
-        const timer = setTimeout(() => {
-            setShowAlert(false);
-        }, 10000); // Mengatur durasi alert tampil selama 10 detik
+        toast.info('Use This Credentials For Testing', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+        });
+        toast.info('Email : admin@admin.dev', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+        });
+        toast.info('Password: admin123', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+        });
 
-        return () => clearTimeout(timer); // Cleanup timer saat komponen unmount
+
     }, []);
 
 
@@ -76,12 +91,14 @@ export default function Home() {
             console.error("Failed to login:", error);
             // get error message
             const errorMessage = error.response.data.error;
-            setErrorMessage(errorMessage);
-            setShowAlert(false);
-            setShowErrorAlert(true);
-            setTimeout(() => {
-                setShowErrorAlert(false);
-            }, 5000);
+            toast.dismiss();
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         } finally {
             setLoading(false); // Nonaktifkan loader setelah selesai
         }
@@ -95,31 +112,6 @@ export default function Home() {
             {loading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
                     <div className="loader"></div>
-                </div>
-            )}
-            {showAlert && (
-                <div className="absolute top-4 right-4 bg-yellow-200 text-yellow-800 p-3 pe-10 rounded-md shadow-md">
-                    <p>Use This Credentials For Testing</p>
-                    <p>Email: <strong>admin@admin.dev</strong></p>
-                    <p>Password: <strong>admin123</strong></p>
-                    <button onClick={() => setShowAlert(false)} className="absolute top-2 right-2 text-red-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            )}
-            {showErrorAlert && (
-                <div className="absolute top-4 right-4 bg-red-200 text-yellow-800 p-3 pe-10 rounded-md shadow-md">
-                    <h2 className='font-bold' >ERROR</h2>
-                    <p>
-                        {errorMessage}
-                    </p>
-                    <button onClick={() => setShowErrorAlert(false)} className="absolute top-2 right-2 text-red-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
                 </div>
             )}
             <div className="relative py-3 sm:max-w-xl sm:mx-auto">
